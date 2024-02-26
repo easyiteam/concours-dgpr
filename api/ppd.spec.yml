@@ -1,0 +1,13 @@
+section:
+  label: Text
+  fields:
+    - item:
+        label: Text
+        type: Text | Nombre | Date | Date de Naissance | Fichier | Paiement | Choix multiple | Champs auto complété
+        value:
+        validations:
+          text: minLength | maxLength
+          nombre: min | max
+          date: min | max
+
+

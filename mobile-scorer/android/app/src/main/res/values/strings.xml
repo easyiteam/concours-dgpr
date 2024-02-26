@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">douanes-scorer</string>
+    <string name="title_activity_main">douanes-scorer</string>
+    <string name="package_name">gouv.douane.scorer</string>
+    <string name="custom_url_scheme">gouv.douane.scorer</string>
+</resources>

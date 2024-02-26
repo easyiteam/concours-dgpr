@@ -1,0 +1,7 @@
+{
+  "name": "scorer",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

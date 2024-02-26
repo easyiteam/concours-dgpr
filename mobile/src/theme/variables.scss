@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  font-family: 'Montserrat', sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.text-center {
+  text-align: center;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    text-align: left;
+    font-size: 12px;
+  }
+
+  td,
+  th {
+    border: solid 1px #aaa;
+    padding: 7px;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// FONT-SISZES
+@mixin generate-font-size($val) {
+  .fs-#{$val} {
+    font-size: $val + px;
+    line-height: 1.4;
+  }
+}
+
+@include generate-font-size(12);
+@include generate-font-size(14);
+@include generate-font-size(16);
+@include generate-font-size(18);
+@include generate-font-size(20);
+@include generate-font-size(24);
+
+.semi-bold {
+  font-weight: 600;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+// BORDER_RADIUS
+@mixin generate-border-radius($val) {
+  .radius-#{$val} {
+    border-radius: $val + px;
+  }
+}
+
+@include generate-border-radius(6);
+@include generate-border-radius(8);
+
+.radius-full {
+  border-radius: 50%;
+}
+
+.top-radius {
+  border-radius: 24px 24px 0 0;
+}
+
+// FLEXBOX
+.flex {
+  display: flex;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+@for $i from 0 to 20 {
+  .gap-#{$i} {
+    gap: $i * 2px;
+  }
+}
+
+$positions: (
+  start: flex-start,
+  end: flex-end,
+  center: center,
+  between: space-between,
+  around: space-around,
+);
+
+@each $key, $val in $positions {
+  .justify-#{$key} {
+    justify-content: $val;
+  }
+
+  .items-#{$key} {
+    align-items: $val;
+  }
+}
+
+// COLORS
+$colors: (
+  primary: #085a03,
+  white: #ffffff,
+  'dark': #09101d,
+  black: #000000,
+  'dark-gray': #394452,
+  'border-dark': #858c94,
+  light: #00000026,
+);
+
+@each $key, $val in $colors {
+  .bg-#{$key} {
+    background-color: $val;
+  }
+
+  .text-#{$key} {
+    color: $val;
+  }
+
+  .border-#{$key} {
+    border: solid 1px $val;
+  }
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
+.noborder {
+  border: none;
+}
+
+.nooutline {
+  outline: none;
+}
+
+// MARGINS
+@for $i from 0 to 31 {
+  .m-#{$i} {
+    margin: $i * 2px;
+  }
+
+  .ml-#{$i} {
+    margin-left: $i * 2px;
+  }
+
+  .mr-#{$i} {
+    margin-right: $i * 2px;
+  }
+
+  .mt-#{$i} {
+    margin-top: $i * 2px;
+  }
+
+  .mb-#{$i} {
+    margin-bottom: $i * 2px;
+  }
+
+  .mx-#{$i} {
+    margin-left: $i * 2px;
+    margin-right: $i * 2px;
+  }
+
+  .my-#{$i} {
+    margin-top: $i * 2px;
+    margin-bottom: $i * 2px;
+  }
+
+  .p-#{$i} {
+    padding: $i * 2px;
+  }
+
+  .pl-#{$i} {
+    padding-left: $i * 2px;
+  }
+
+  .pr-#{$i} {
+    padding-right: $i * 2px;
+  }
+
+  .pt-#{$i} {
+    padding-top: $i * 2px;
+  }
+
+  .pb-#{$i} {
+    padding-bottom: $i * 2px;
+  }
+
+  .px-#{$i} {
+    padding-left: $i * 2px;
+    padding-right: $i * 2px;
+  }
+
+  .py-#{$i} {
+    padding-top: $i * 2px;
+    padding-bottom: $i * 2px;
+  }
+}
+
+// LAYOUTS
+
+.fixed {
+  position: fixed;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+input {
+  background-color: #fff;
+}

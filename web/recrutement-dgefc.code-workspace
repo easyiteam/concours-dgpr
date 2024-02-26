@@ -1,0 +1,29 @@
+{
+  "folders": [
+    {
+      "path": "../../../.."
+    },
+    {
+      "name": "api",
+      "path": "../../.."
+    },
+    {
+      "name": "mobile",
+      "path": "../../../../mobile"
+    },
+    {
+      "name": "dashboard",
+      "path": "../../../../dashboard"
+    },
+    {
+      "name": "web",
+      "path": "../../../../web"
+    }
+  ],
+  "settings": {
+    "liveServer.settings.port": 5501,
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "jest.disabledWorkspaceFolders": ["recrutement-dgefc", "dashboard", "web"]
+  }
+}

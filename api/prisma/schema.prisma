@@ -1,0 +1,340 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model File {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  originalName String
+  size         Int
+  views        Int    @default(0)
+  downloaded   Int    @default(0)
+  path         String
+}
+
+enum BasicRole {
+  USER
+  EXAM_MANAGER
+  ADMIN
+}
+
+model Auth {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  username String? @unique
+  fullname String?
+  email    String  @unique
+  password String?
+
+  isVerified Boolean    @default(false)
+  role       BasicRole
+  httpLogs   HttpLog[]
+  exams      AuthExam[]
+}
+
+model AuthExam {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  exam   Exam   @relation(fields: [examId], references: [id])
+  examId String
+
+  auth   Auth   @relation(fields: [authId], references: [id])
+  authId String
+
+  filter String
+  value  String
+}
+
+model HttpLog {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  ip     String
+  action String
+  url    String
+  method String
+  query  Json?
+  params Json?
+  body   Json?
+
+  author   Auth?   @relation(fields: [authorId], references: [id])
+  authorId String?
+}
+
+enum ValidatorStatus {
+  ACTIVATING
+  ACTIVE
+  REVOCATING
+  REVOCATED
+}
+
+model Validator {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  fullname String
+  email    String
+  fonction String
+
+  pin    String?
+  status ValidatorStatus @default(ACTIVATING)
+
+  validations ValidatorValidation[]
+  Exam        Exam?                 @relation(fields: [examId], references: [id])
+  examId      String?
+}
+
+enum ValidationStatus {
+  PENDING
+  SUCCESS
+}
+
+model Validation {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  status     ValidationStatus      @default(PENDING)
+  validators ValidatorValidation[]
+}
+
+model ValidatorValidation {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  validator   Validator @relation(fields: [validatorId], references: [id])
+  validatorId String
+
+  validation   Validation @relation(fields: [validationId], references: [id])
+  validationId String
+
+  status ValidationStatus @default(PENDING)
+}
+
+model Exam {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  label     String
+  shortName String
+
+  isClosed Boolean @default(false)
+
+  participantProfileDefinition Json
+  steps                        Step[]
+  validators                   Validator[]
+  candidatures                 Candidature[]
+  auths                        AuthExam[]
+  Field                        Field[]
+  Center                       Center[]
+}
+
+enum StepStatus {
+  CREATED
+  IN_PROGRESS
+  FINISHED
+}
+
+model Step {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  label  String
+  active Boolean @default(false)
+  order  Int
+  exam   Exam    @relation(fields: [examId], references: [id])
+  examId String
+
+  status StepStatus @default(CREATED)
+
+  candidatures Candidature[]
+}
+
+enum CandidatureStatus {
+  INDETERMINATE
+  ACCEPTED
+  REJECTED
+}
+
+model ParticipantProfile {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  value        Json
+  active       Boolean @default(true)
+  rejectReason String?
+
+  candidature   Candidature @relation(fields: [candidatureId], references: [id])
+  candidatureId String
+}
+
+model Candidature {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  profiles  ParticipantProfile[]
+  status    CandidatureStatus    @default(INDETERMINATE)
+  reference String?
+  count     Int                  @default(autoincrement())
+  step      Step?                @relation(fields: [stepId], references: [id])
+  stepId    String?
+
+  exam           Exam?            @relation(fields: [examId], references: [id])
+  examId         String?
+  sportProfiles  SportProfile[]
+  WritingProfile WritingProfile[]
+}
+
+model SportProfile {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  candidature   Candidature               @relation(fields: [candidatureId], references: [id])
+  candidatureId String
+  performances  SportProfilePerformance[]
+
+  status CandidatureStatus @default(INDETERMINATE)
+
+  total Float @default(0)
+  mean  Float @default(0)
+  rank  Int?
+}
+
+enum PerformanceType {
+  WomanRace80Meters
+  WomanRace800Meters
+  ManRace100Meters
+  ManRace1000Meters
+  WomanClimbing
+  ManClimbing
+}
+
+model SportProfilePerformance {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  sportProfile   SportProfile @relation(fields: [sportProfileId], references: [id])
+  sportProfileId String
+
+  type  PerformanceType
+  value String
+  score Float           @default(0)
+}
+
+model Docs {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  title       String
+  description String?
+  url         String
+  size        Int
+
+  at DateTime @default(now())
+
+  views     Int @default(0)
+  downloads Int @default(0)
+}
+
+model Field {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  enabled   Boolean  @default(true)
+
+  code        String
+  label       String
+  coefficient Float  @default(1.0)
+
+  exam   Exam   @relation(fields: [examId], references: [id])
+  examId String
+
+  scores Score[]
+}
+
+model Score {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  enabled   Boolean  @default(true)
+
+  value  Float  @default(0.0)
+  qrcode String
+  code   String
+
+  field   Field  @relation(fields: [fieldId], references: [id])
+  fieldId String
+
+  profile          WritingProfile @relation(fields: [writingProfileId], references: [id])
+  writingProfileId String
+}
+
+model Center {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  label    String
+  profiles WritingProfile[]
+
+  exam   Exam?   @relation(fields: [examId], references: [id])
+  examId String?
+}
+
+model WritingProfile {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  candidature   Candidature @relation(fields: [candidatureId], references: [id])
+  candidatureId String
+
+  status CandidatureStatus @default(INDETERMINATE)
+
+  room Int @default(0)
+
+  center   Center @relation(fields: [centerId], references: [id])
+  centerId String
+
+  total Float @default(0)
+  mean  Float @default(0)
+  rank  Int?
+
+  scores Score[]
+}

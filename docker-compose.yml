@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  migrate:
+    build: ./api
+    container_name: dgpr_migrate
+    env_file: ./api/.env.prod
+    command: npm run migrate:prod
+    networks:
+      - dgpr
+
+  api:
+    build: ./api
+    container_name: dgpr_api
+    depends_on:
+      - migrate
+    env_file: ./api/.env.prod
+    command: npm run start:prod
+    ports:
+      - 7020:7020
+    networks:
+      - dgpr
+    volumes:
+      - uploads:/app/uploads
+
+  postgres:
+    image: postgres:14
+    restart: always
+    container_name: dgpr_pg
+    env_file:
+      - ./api/.env.prod
+    networks:
+      - dgpr
+    volumes:
+      - data:/var/lib/postgresql
+
+  dashboard:
+    build: ./dashboard
+    ports:
+      - 7021:80
+
+  web:
+    build: ./web
+    ports:
+      - 7022:80
+
+volumes:
+  data:
+  uploads:
+
+networks:
+  dgpr:

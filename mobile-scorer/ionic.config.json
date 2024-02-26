@@ -1,0 +1,7 @@
+{
+  "name": "douanes-scorer",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

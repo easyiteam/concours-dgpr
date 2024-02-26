@@ -1,0 +1,7 @@
+{
+  "name": "DGEFC_RECRUT",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
