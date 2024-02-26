@@ -23,17 +23,6 @@ services:
     volumes:
       - uploads:/app/uploads
 
-  postgres:
-    image: postgres:14
-    restart: always
-    container_name: dgpr_pg
-    env_file:
-      - ./api/.env.prod
-    networks:
-      - dgpr
-    volumes:
-      - data:/var/lib/postgresql
-
   dashboard:
     build: ./dashboard
     ports:
@@ -43,10 +32,6 @@ services:
     build: ./web
     ports:
       - 7022:80
-
-volumes:
-  data:
-  uploads:
 
 networks:
   dgpr:
