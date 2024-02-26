@@ -12,7 +12,7 @@ form.addEventListener('submit', async (e) => {
   });
 
   if (result.status === 200) {
-    alert('Révocation confirmée avec succès');
-    location.replace('https://google.bj');
+    alert('Validation confirmée avec succès');
+    location.replace('https://admin-dgpr-concours.easyiteam.bj');
   }
 });

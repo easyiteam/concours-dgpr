@@ -34,6 +34,6 @@ form.addEventListener('submit', async (e) => {
 
   if (result.data) {
     alert('Mot de passe défini avec succès');
-    location.replace('https://google.bj');
+    location.replace('https://admin-dgpr-concours.easyiteam.bj');
   }
 });
