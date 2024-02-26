@@ -37,7 +37,7 @@ export const Topbar = ({
         <a
           className="text-blue-500 underline text-sm"
           target="_blank"
-          href="https://webmail.dgefc.bj/roundcube/index.php?_user=contact%40dgefc.bj">
+          href="#">
           Webmail
         </a>
         <Dropdown
