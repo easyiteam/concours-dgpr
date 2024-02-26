@@ -1,4 +1,4 @@
-FROM node:18-alpine as build
+FROM node:18 as build
 
 RUN apt-get update \
   && apt-get install -y wget gnupg \
