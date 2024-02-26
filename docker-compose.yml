@@ -20,8 +20,6 @@ services:
       - 7020:7020
     networks:
       - dgpr
-    volumes:
-      - uploads:/app/uploads
 
   dashboard:
     build: ./dashboard
