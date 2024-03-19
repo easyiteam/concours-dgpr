@@ -55,7 +55,7 @@ export const Sidebar = () => {
           alt="LOGO"
           className="h-[120px] mx-auto"
         />
-        <div className="text-center py-4 text-lg font-semibold">
+        <div className="text-center py-4 text-xs font-semibold">
           DIRECTION GÉNÉRALE DE LA POLICE REPUBLICAINE
         </div>
       </div>

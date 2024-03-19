@@ -7,12 +7,12 @@ export const Header = () => {
       <img
         src={armoirie}
         alt="ARMOIRIE"
-        className="h-[40px] lg:h-[70px]"
+        className="h-[40px] lg:h-[100px]"
       />
       <img
         src={logo}
         alt="LOGO"
-        className="h-[30px] lg:h-[60px]"
+        className="h-[30px] lg:h-[100px]"
       />
     </div>
   );

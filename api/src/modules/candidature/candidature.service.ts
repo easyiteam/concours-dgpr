@@ -68,8 +68,8 @@ export class CandidatureService extends PrismaGenericRepository<
       data: { value: data, candidatureId: candidature.id },
     });
 
-    const reference = `${getTwoDigitYear()}${getTwoDigitMonth()}${
-      data.gender ? data.gender[0] : 'C'
+    const reference = `PR${getTwoDigitYear()}${getTwoDigitMonth()}${
+      data.gender ? data.gender[0] : 'X'
     }${prefixWithZeros(candidature.count)}`;
 
     return await this.update(

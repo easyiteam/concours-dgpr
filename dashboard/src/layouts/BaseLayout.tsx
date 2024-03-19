@@ -7,6 +7,7 @@ import { examApi } from '../api/exam.api';
 import { Exam } from '../api/typings';
 import { useParams } from 'react-router-dom';
 import { ExamStore } from '../store/exam.store';
+import { BeninFlag } from '../components/display/BeninFlag';
 
 export const BaseLayout = ({ children }: PropsWithChildren) => {
   useAuth();
@@ -37,6 +38,7 @@ export const BaseLayout = ({ children }: PropsWithChildren) => {
         />
         <MainWindow>{children}</MainWindow>
       </div>
+      <BeninFlag />
     </div>
   );
 };

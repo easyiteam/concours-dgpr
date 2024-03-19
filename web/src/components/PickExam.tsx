@@ -23,7 +23,11 @@ export const PickExam = () => {
 
   return (
     <div className="bg-white rounded-none lg:rounded-lg p-10 w-full lg:w-[70%] mx-auto shadow-none lg:shadow-xl -translate-y-[8vh]">
-      <div className="text-center text-xl mb-10">Choisissez votre profil.</div>
+      {exams.length > 0 && (
+        <div className="text-center text-xl mb-10">
+          Choisissez votre profil.
+        </div>
+      )}
       <div className="grid lg:grid-cols-3 gap-8">
         {exams.map((exam, index) => (
           <div

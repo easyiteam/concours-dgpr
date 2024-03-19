@@ -19,7 +19,7 @@ export const Footer = () => {
           </div>
           <div className="flex items-center gap-2">
             <MailSvg />
-            <span>contact@dgefc.bj</span>
+            <span>contact@dgpr.bj</span>
           </div>
         </div>
       </div>
