@@ -125,7 +125,7 @@ export const defaultParticipantProfile: Section[] = [
         type: 'paiement',
         validation: {
           amount: 10000,
-          apiKey: 'pk_live_VaSz8KbAudBy7lTaWFLD8tpG',
+          apiKey: import.meta.env.VITE_FEDAYPAY_API_KEY,
         },
       },
     ],
