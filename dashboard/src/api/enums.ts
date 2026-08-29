@@ -2,6 +2,7 @@ export enum Role {
   USER = 'USER',
   ADMIN = 'ADMIN',
   EXAM_MANAGER = 'EXAM_MANAGER',
+  MEDICAL_MONITOR = 'MEDICAL_MONITOR',
 }
 
 export enum CandidatureStatus {
