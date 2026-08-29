@@ -31,5 +31,10 @@ services:
     ports:
       - 7022:80
 
+  sigycop-scorer:
+    build: ./sigycop-scorer
+    ports:
+      - 7023:80
+
 networks:
   dgpr:
