@@ -1,23 +1,24 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsObject, IsOptional, IsString } from 'class-validator';
 
 export class CreateExam {
-  @ApiProperty() label: string;
-  @ApiProperty() participantProfileDefinition: Record<string, any>;
-  @ApiProperty() shortName: string;
+  @ApiProperty() @IsString() label: string;
+  @ApiProperty() @IsObject() participantProfileDefinition: Record<string, any>;
+  @ApiProperty() @IsString() shortName: string;
 }
 
 export class UpdateExam {
-  @ApiPropertyOptional() label?: string;
-  @ApiPropertyOptional() participantProfileDefinition?: Record<string, any>;
-  @ApiPropertyOptional() shortName?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() label?: string;
+  @ApiPropertyOptional() @IsOptional() @IsObject() participantProfileDefinition?: Record<string, any>;
+  @ApiPropertyOptional() @IsOptional() @IsString() shortName?: string;
 }
 
 export class CreateCenter {
-  @ApiProperty() label: string;
-  @ApiProperty() examId: string;
+  @ApiProperty() @IsString() label: string;
+  @ApiProperty() @IsString() examId: string;
 }
 
 export class UpdateCenter {
-  @ApiPropertyOptional() label?: string;
-  @ApiPropertyOptional() examId?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() label?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() examId?: string;
 }

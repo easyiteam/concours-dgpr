@@ -1,17 +1,18 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateDoc {
-  @ApiProperty() title: string;
-  @ApiProperty() description: string;
-  @ApiProperty() url: string;
-  @ApiProperty() size: number;
-  @ApiPropertyOptional() at?: string;
+  @ApiProperty() @IsString() title: string;
+  @ApiProperty() @IsString() description: string;
+  @ApiProperty() @IsString() url: string;
+  @ApiProperty() @IsNumber() size: number;
+  @ApiPropertyOptional() @IsOptional() @IsString() at?: string;
 }
 
 export class UpdateDoc {
-  @ApiPropertyOptional() title?: string;
-  @ApiPropertyOptional() description?: string;
-  @ApiPropertyOptional() url?: string;
-  @ApiPropertyOptional() size?: number;
-  @ApiPropertyOptional() at?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() title?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() description?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() url?: string;
+  @ApiPropertyOptional() @IsOptional() @IsNumber() size?: number;
+  @ApiPropertyOptional() @IsOptional() @IsString() at?: string;
 }
