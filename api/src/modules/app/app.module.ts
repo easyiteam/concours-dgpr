@@ -17,6 +17,7 @@ import { SportModule } from '../sport/sport.module';
 import { ValidatorModule } from '../validator/validator.module';
 import { WritingModule } from '../writing/writing.module';
 import { FieldsModule } from '../fields/fields.module';
+import { SigycopModule } from '../sigycop/sigycop.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { FieldsModule } from '../fields/fields.module';
     ValidatorModule,
     WritingModule,
     FieldsModule,
+    SigycopModule,
   ],
   controllers: [AppController],
   providers: [
