@@ -27,6 +27,7 @@ enum BasicRole {
   USER
   EXAM_MANAGER
   ADMIN
+  MEDICAL_MONITOR
 }
 
 model Auth {
@@ -173,6 +174,8 @@ model Step {
 
   status StepStatus @default(CREATED)
 
+  evaluationConfig Json?
+
   candidatures Candidature[]
 }
 
@@ -213,6 +216,7 @@ model Candidature {
   examId         String?
   sportProfiles  SportProfile[]
   WritingProfile WritingProfile[]
+  sigycopProfile SigycopProfile?
 }
 
 model SportProfile {
@@ -311,9 +315,36 @@ model Center {
 
   label    String
   profiles WritingProfile[]
+  sigycopProfiles SigycopProfile[]
 
   exam   Exam?   @relation(fields: [examId], references: [id])
   examId String?
+}
+
+model SigycopProfile {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enabled   Boolean  @default(true)
+
+  candidature   Candidature @relation(fields: [candidatureId], references: [id])
+  candidatureId String      @unique
+
+  center   Center @relation(fields: [centerId], references: [id])
+  centerId String
+
+  s Int
+  i Int
+  g Int
+  y Int
+  c Int
+  o Int
+  p Int
+
+  apte       Boolean
+  failedAxes String[]
+
+  status CandidatureStatus @default(INDETERMINATE)
 }
 
 model WritingProfile {

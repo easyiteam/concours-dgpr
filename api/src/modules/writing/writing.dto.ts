@@ -1,19 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, Max, Min } from 'class-validator';
+import { IsNumber, IsString, Max, Min } from 'class-validator';
 
 export class CreateRepartition {
-  @ApiProperty() examId: string;
-  @ApiProperty() centerId: string;
-  @ApiProperty() n: number;
+  @ApiProperty() @IsString() examId: string;
+  @ApiProperty() @IsString() centerId: string;
+  @ApiProperty() @IsNumber() n: number;
 }
 
 export class GenerateCode {
-  @ApiProperty() examId: string;
-  @ApiProperty() fieldId: string;
+  @ApiProperty() @IsString() examId: string;
+  @ApiProperty() @IsString() fieldId: string;
 }
 
 export class InsertScore {
-  @ApiProperty() code: string;
+  @ApiProperty() @IsString() code: string;
 
   @Min(0)
   @Max(20)

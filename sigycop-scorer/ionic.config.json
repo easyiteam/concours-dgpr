@@ -1,0 +1,7 @@
+{
+  "name": "sigycop-scorer",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

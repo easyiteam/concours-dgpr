@@ -73,7 +73,11 @@ export interface CreateStep {
   order: number;
   examId: string;
 }
-export type Step = WithBase<CreateStep> & { active: boolean };
+export type Step = WithBase<CreateStep> & {
+  active: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  evaluationConfig?: Record<string, any> | null;
+};
 
 export interface CreateDocument {
   title: string;
@@ -102,6 +106,7 @@ export const ROLES = [
   { id: Role.ADMIN, label: 'ADMIN' },
   { id: Role.USER, label: 'UTILISATEUR' },
   { id: Role.EXAM_MANAGER, label: 'GESTIONNAIRE DE CONCOURS' },
+  { id: Role.MEDICAL_MONITOR, label: 'MONITEUR VISITE MÉDICALE' },
 ];
 
 export enum PerformanceType {
@@ -220,4 +225,25 @@ export type WritingProfile = {
   mean?: number;
   rank?: number;
   scores?: Score[];
+};
+
+export type SigycopProfile = {
+  id: string;
+  candidatureId: string;
+  candidature: Candidature;
+
+  center: Center;
+  centerId: string;
+
+  s: number;
+  i: number;
+  g: number;
+  y: number;
+  c: number;
+  o: number;
+  p: number;
+
+  apte: boolean;
+  failedAxes: string[];
+  status: CandidatureStatus;
 };

@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 export enum GlobalPerformanceType {
   RACE = 'RACE',
@@ -7,19 +8,23 @@ export enum GlobalPerformanceType {
 }
 
 export class RegisterPresence {
-  @ApiProperty() reference: string;
+  @ApiProperty() @IsString() reference: string;
 }
 
 export class RegisterPerformance {
-  @ApiProperty() reference: string;
-  @ApiProperty({ enum: GlobalPerformanceType }) type: GlobalPerformanceType;
+  @ApiProperty() @IsString() reference: string;
+  @ApiProperty({ enum: GlobalPerformanceType })
+  @IsEnum(GlobalPerformanceType)
+  type: GlobalPerformanceType;
 
-  @ApiProperty() value: string;
+  @ApiProperty() @IsString() value: string;
 }
 
 export class UpdatePerformance {
-  @ApiProperty() reference: string;
+  @ApiProperty() @IsString() reference: string;
   @ApiPropertyOptional({ enum: GlobalPerformanceType })
+  @IsOptional()
+  @IsEnum(GlobalPerformanceType)
   type?: GlobalPerformanceType;
-  @ApiPropertyOptional() value?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() value?: string;
 }

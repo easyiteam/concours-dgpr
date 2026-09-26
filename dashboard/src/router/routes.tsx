@@ -24,6 +24,7 @@ import { WritingRoot } from '../pages/admin/WritingRoot';
 import { WritingCenterRepartition } from '../pages/admin/WritingCenterRepartition';
 import { WritingScores } from '../pages/admin/WritingScores';
 import { WritingResults } from '../pages/admin/WritingResults';
+import { Sigycop } from '../pages/admin/Sigycop';
 
 export const Paths = {
   login: '/',
@@ -88,6 +89,10 @@ export const ROUTES: RouteItem[] = [
       {
         path: 'sport',
         element: <Sport />,
+      },
+      {
+        path: 'sigycop',
+        element: <Sigycop />,
       },
       {
         path: 'results',

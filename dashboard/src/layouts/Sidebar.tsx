@@ -36,6 +36,12 @@ const links = [
     roles: [Role.ADMIN, Role.EXAM_MANAGER, Role.USER],
   },
   {
+    icon: 'medical_services',
+    label: 'Visite médicale',
+    path: 'sigycop',
+    roles: [Role.ADMIN, Role.MEDICAL_MONITOR],
+  },
+  {
     icon: 'settings',
     label: 'Paramètres',
     path: 'settings',

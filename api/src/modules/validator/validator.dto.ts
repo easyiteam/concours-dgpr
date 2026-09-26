@@ -1,27 +1,27 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsOptional, MinLength } from 'class-validator';
+import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateValidator {
-  @ApiProperty() fullname: string;
+  @ApiProperty() @IsString() fullname: string;
 
   @IsEmail()
   @ApiProperty()
   email: string;
 
-  @ApiProperty() fonction: string;
+  @ApiProperty() @IsString() fonction: string;
 }
 
 export class UpdateValidator {
-  @ApiPropertyOptional() fullname?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() fullname?: string;
 
   @IsEmail()
   @IsOptional()
   @ApiPropertyOptional()
   email?: string;
 
-  @ApiPropertyOptional() fonction?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() fonction?: string;
 }
 
 export class DefinePin {
-  @ApiProperty() @MinLength(6) pin: string;
+  @ApiProperty() @IsString() @MinLength(6) pin: string;
 }
