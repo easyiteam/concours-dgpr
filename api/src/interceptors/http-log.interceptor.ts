@@ -8,10 +8,11 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { Prisma } from '@prisma/client';
 import * as chalk from 'chalk';
 import { Observable, map } from 'rxjs';
 
-function redactSensitiveValues(value: unknown): unknown {
+function redactSensitiveValues(value: unknown): Prisma.InputJsonValue {
   if (Array.isArray(value)) {
     return value.map(redactSensitiveValues);
   }
@@ -27,7 +28,7 @@ function redactSensitiveValues(value: unknown): unknown {
     );
   }
 
-  return value;
+  return value as Prisma.InputJsonValue;
 }
 
 @Injectable()

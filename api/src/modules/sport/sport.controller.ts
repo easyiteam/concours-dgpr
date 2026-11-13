@@ -96,7 +96,7 @@ export class SportController {
       filename: `Performance sport_${args.center ?? 'tout'}`,
     });
 
-    await writeFile(path, buffer as Buffer);
+    await writeFile(path, buffer as unknown as Buffer);
 
     res.download(path);
   }
@@ -117,7 +117,7 @@ export class SportController {
       filename: `Performance sport_${args.center ?? 'tout'}`,
     });
 
-    await writeFile(path, buffer as Buffer);
+    await writeFile(path, buffer as unknown as Buffer);
 
     res.download(path);
   }

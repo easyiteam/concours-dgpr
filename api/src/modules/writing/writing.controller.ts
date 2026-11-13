@@ -65,7 +65,7 @@ export class WritingController {
       filename: `Resultats`,
     });
 
-    await writeFile(path, buffer as Buffer);
+    await writeFile(path, buffer as unknown as Buffer);
 
     res.download(path);
   }
@@ -83,7 +83,7 @@ export class WritingController {
       filename: `Resultats`,
     });
 
-    await writeFile(path, buffer as Buffer);
+    await writeFile(path, buffer as unknown as Buffer);
 
     res.download(path);
   }

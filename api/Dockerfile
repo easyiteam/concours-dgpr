@@ -10,8 +10,8 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY package.json .
-RUN yarn
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 COPY . .
 RUN yarn generate
 RUN yarn build

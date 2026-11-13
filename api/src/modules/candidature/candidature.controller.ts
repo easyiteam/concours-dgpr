@@ -197,7 +197,7 @@ export class CandidatureController {
       }`,
     });
 
-    await writeFile(path, buffer as Buffer);
+    await writeFile(path, buffer as unknown as Buffer);
 
     res.download(path);
   }

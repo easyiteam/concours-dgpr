@@ -66,7 +66,7 @@ export class SigycopController {
       filename: `Visite medicale SIGYCOP_${args.center ?? 'tout'}`,
     });
 
-    await writeFile(path, buffer as Buffer);
+    await writeFile(path, buffer as unknown as Buffer);
 
     res.download(path);
   }

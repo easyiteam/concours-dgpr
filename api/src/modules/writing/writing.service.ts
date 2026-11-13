@@ -157,7 +157,7 @@ export class WritingService extends PrismaGenericRepository<
         filename: `Salle_${room}_${center.label}`,
       },
     );
-    await writeFile(path, buffer as Buffer);
+    await writeFile(path, buffer as unknown as Buffer);
     return path;
   }
 
@@ -298,7 +298,7 @@ export class WritingService extends PrismaGenericRepository<
     const buffer = await convertToSheet($profiles, {
       filename: `Liste_${exam.label}_${center.label}_Salle_${room}`,
     });
-    await writeFile(path, buffer as Buffer);
+    await writeFile(path, buffer as unknown as Buffer);
     return path;
   }
 
@@ -506,7 +506,7 @@ export class WritingService extends PrismaGenericRepository<
 
     return values.map((value) => {
       const result: Record<string, string> = {};
-      result.Rang = value.rank + '' ?? '';
+      result.Rang = String(value.rank ?? '');
       const getFieldScore = (id: string) =>
         value.scores.find((score) => score.fieldId === id);
       for (const field of fields) {
@@ -542,7 +542,7 @@ export class WritingService extends PrismaGenericRepository<
     return values.map((value) => {
       const result: Record<string, string> = {};
       const profile = value.candidature.activeProfile;
-      result.Rang = value.rank + '' ?? '';
+      result.Rang = String(value.rank ?? '');
       result["Numéro d'inscription"] = value.candidature.reference;
       result['Nom'] = profile.value.lastname;
       result['Prénom(s)'] = profile.value.firstname;
