@@ -5,7 +5,8 @@ import { EmailService } from '@app/email';
 import { initPushEventSubscription } from '@asaje/sse-push-event-server';
 import { Response } from 'express';
 import { BasicRoles, SecureController } from '@app/decorators';
-import { BasicRole } from '@prisma/client';
+import { CurrentAuth } from '@app/decorators/current-auth.decorator';
+import { Auth, BasicRole } from '@prisma/client';
 
 @SecureController('', 'Default')
 export class AppController {
@@ -30,12 +31,12 @@ export class AppController {
 
   @Get('test-email')
   @BasicRoles(BasicRole.ADMIN)
-  async testEmail() {
+  async testEmail(@CurrentAuth() auth: Partial<Auth>) {
     return await this.emailService.sendEmail({
-      to: 'salemaffa@gmail.com',
+      to: auth.email,
       subject: 'Test email notification',
       template: 'test',
-      data: { name: 'Salem' },
+      data: { name: auth.username ?? auth.email.split('@')[0] },
     });
   }
 

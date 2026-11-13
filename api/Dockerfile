@@ -1,4 +1,4 @@
-FROM node:18 as build
+FROM node:22 AS build
 
 RUN apt-get update \
   && apt-get install -y wget gnupg \

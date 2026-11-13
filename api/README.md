@@ -48,7 +48,7 @@ $ yarn run start:prod
 ## Transactional email and password reset
 
 The API sends transactional emails through the SuperSend TX API. Configure
-`SUPERSENDTX_API_KEY` in the local, Git-ignored `api/.env` file. The
+`SUPERSENDTX_API_KEY` and `EMAIL_FROM` in the local, Git-ignored `api/.env` file. The
 `EMAIL_FROM` address configured for the API must belong to a domain verified
 with SuperSend TX.
 

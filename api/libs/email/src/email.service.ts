@@ -3,8 +3,28 @@ import { CreateEmail } from './email.typings';
 import { Env } from '@app/shared';
 import { parseEmailTemplate } from './email.parser';
 import { readFile } from 'fs/promises';
+import { extname } from 'path';
 
-const SUPER_SEND_TX_API_URL = 'https://api.groundmail.dev/emails';
+const SUPER_SEND_TX_API_URL = 'https://api.supersendtx.com/emails';
+
+const CONTENT_TYPES: Record<string, string> = {
+  pdf: 'application/pdf',
+  png: 'image/png',
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  doc: 'application/msword',
+  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  xls: 'application/vnd.ms-excel',
+  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  csv: 'text/csv',
+  txt: 'text/plain',
+  zip: 'application/zip',
+};
+
+function contentTypeOf(filename: string): string {
+  const extension = extname(filename).slice(1).toLowerCase();
+  return CONTENT_TYPES[extension] ?? 'application/octet-stream';
+}
 
 function parseFromAddress(raw: string): { email: string; name?: string } {
   const match = raw.match(/^(.*?)\s*<(.+)>\s*$/);
@@ -57,14 +77,10 @@ export class EmailService {
     const attachments = await Promise.all(
       (data.attachments ?? []).map(async (attachment) => ({
         filename: attachment.filename,
-        contentType: 'application/octet-stream',
+        contentType: contentTypeOf(attachment.filename),
         content: (await readFile(attachment.path)).toString('base64'),
       })),
     );
-    const sender = fromAddress.name
-      ? `"${fromAddress.name.replace(/"/g, '\\"')}" <${fromAddress.email}>`
-      : fromAddress.email;
-
     const response = await fetch(SUPER_SEND_TX_API_URL, {
       method: 'POST',
       headers: {
@@ -73,7 +89,11 @@ export class EmailService {
       },
       signal: AbortSignal.timeout(15000),
       body: JSON.stringify({
-        from: sender,
+        // SuperSend TX wants the address and display name as separate fields.
+        from: {
+          email: fromAddress.email,
+          ...(fromAddress.name ? { name: fromAddress.name } : {}),
+        },
         to: data.to,
         subject: data.subject ?? '',
         html,
@@ -85,8 +105,10 @@ export class EmailService {
     });
 
     if (!response.ok) {
+      // The response body explains the rejection (key, domain, quota).
+      const detail = (await response.text().catch(() => '')).slice(0, 500);
       throw new Error(
-        `SuperSend TX request failed (${response.status} ${response.statusText})`,
+        `SuperSend TX request failed (${response.status} ${response.statusText})${detail ? `: ${detail}` : ''}`,
       );
     }
   }

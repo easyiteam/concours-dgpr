@@ -155,8 +155,11 @@ export class AuthService extends PrismaGenericRepository<
         action,
         passwordVersion: this.getPasswordVersion(auth.password),
       },
+      // @asaje/token-generator counts expiresIn in milliseconds.
       expiresIn:
-        action === AuthAction.RESET_PASSWORD ? 30 * 60 : 24 * 60 * 60,
+        action === AuthAction.RESET_PASSWORD
+          ? 30 * 60 * 1000
+          : 24 * 60 * 60 * 1000,
     });
     const url = `${host}/auth/${AuthViews.definePassword}/${auth.id}#token=${encodeURIComponent(token)}`;
 
