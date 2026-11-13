@@ -12,7 +12,4 @@ export class CreateEmail {
   from?: string;
   cc?: string;
   attachments?: FileAttachment[];
-  host?: string;
-  user?: string;
-  pass?: string;
 }

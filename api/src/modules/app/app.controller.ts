@@ -29,6 +29,7 @@ export class AppController {
   }
 
   @Get('test-email')
+  @BasicRoles(BasicRole.ADMIN)
   async testEmail() {
     return await this.emailService.sendEmail({
       to: 'salemaffa@gmail.com',

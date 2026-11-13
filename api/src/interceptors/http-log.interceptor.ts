@@ -11,6 +11,25 @@ import { Reflector } from '@nestjs/core';
 import * as chalk from 'chalk';
 import { Observable, map } from 'rxjs';
 
+function redactSensitiveValues(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map(redactSensitiveValues);
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, child]) => [
+        key,
+        /password|token|secret|authorization/i.test(key)
+          ? '[REDACTED]'
+          : redactSensitiveValues(child),
+      ]),
+    );
+  }
+
+  return value;
+}
+
 @Injectable()
 export class HttpLogInterceptor implements NestInterceptor {
   constructor(private prisma: PrismaService) {}
@@ -27,11 +46,11 @@ export class HttpLogInterceptor implements NestInterceptor {
             data: {
               action: action ?? 'Action inconnue',
               method: req.method,
-              url: req.originalUrl,
+              url: req.path,
               authorId: req.auth?.id ?? data?.credentials?.id ?? 'Unknown',
-              query: req.query,
-              params: req.params,
-              body: req.body,
+              query: redactSensitiveValues(req.query),
+              params: redactSensitiveValues(req.params),
+              body: redactSensitiveValues(req.body),
               ip: req.ip,
             },
           })

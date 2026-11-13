@@ -12,6 +12,9 @@ import { Paths } from '../router/routes';
 
 export const Login = () => {
   const navigate = useNavigate();
+  const [resetMode, setResetMode] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
   const [auth, setAuth] = useState({
     email: '',
     password: '',
@@ -35,6 +38,27 @@ export const Login = () => {
     navigate(Paths.exam.index);
   };
 
+  const handleResetPassword = async () => {
+    setResetLoading(true);
+    const sent = await authApi.requestPasswordReset(resetEmail);
+    setResetLoading(false);
+
+    if (sent) {
+      openToast({
+        type: 'success',
+        info: 'Si un compte est associé à cette adresse, un lien a été envoyé.',
+      });
+      setResetMode(false);
+      setResetEmail('');
+      return;
+    }
+
+    openToast({
+      type: 'error',
+      info: 'Impossible d’envoyer le lien pour le moment. Réessayez plus tard.',
+    });
+  };
+
   return (
     <div className="h-full">
       <div className="w-[80%] md:w-[30%] mx-auto mt-[20vh]">
@@ -44,24 +68,60 @@ export const Login = () => {
           Direction Générale de la Police Républicaine
         </div>
         <div className="border p-8 shadow-lg bg-white rounded-xl">
-          <Form
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-6">
-            <Input
-              value={auth.email}
-              name="email"
-              onChange={handleChange}
-              label="Nom d'utilisateur"
-            />
-            <Password
-              name="password"
-              onChange={handleChange}
-              label="Mot de passe"
-            />
-            <Button className="w-full bg-blue-600 shadow-none">
-              Se connecter
-            </Button>
-          </Form>
+          {resetMode ? (
+            <Form
+              onSubmit={handleResetPassword}
+              className="flex flex-col gap-6">
+              <p className="text-sm text-gray-600">
+                Saisissez l’adresse e-mail associée à votre compte administrateur.
+              </p>
+              <Input
+                label="Adresse e-mail"
+                name="resetEmail"
+                type="email"
+                autoComplete="email"
+                required
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+              />
+              <Button
+                className="w-full bg-blue-600 shadow-none"
+                disabled={resetLoading}>
+                Envoyer le lien
+              </Button>
+              <button
+                type="button"
+                className="text-sm text-blue-700 hover:underline"
+                onClick={() => setResetMode(false)}>
+                Retour à la connexion
+              </button>
+            </Form>
+          ) : (
+            <Form
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-6">
+              <Input
+                value={auth.email}
+                name="email"
+                onChange={handleChange}
+                label="Nom d'utilisateur ou e-mail"
+              />
+              <Password
+                name="password"
+                onChange={handleChange}
+                label="Mot de passe"
+              />
+              <Button className="w-full bg-blue-600 shadow-none">
+                Se connecter
+              </Button>
+              <button
+                type="button"
+                className="text-sm text-blue-700 hover:underline"
+                onClick={() => setResetMode(true)}>
+                Mot de passe oublié ?
+              </button>
+            </Form>
+          )}
         </div>
       </div>
       <BeninFlag />

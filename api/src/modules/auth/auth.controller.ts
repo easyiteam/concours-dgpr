@@ -64,12 +64,13 @@ export class AuthController {
 
     sendPushEvent({ event: 'auth.update', data: {} });
 
-    return await this.authService.generateAndSendUrl(
+    await this.authService.generateAndSendUrl(
       host,
       auth,
       AuthAction.DEFINE_PASSWORD,
       AuthEmailTemplates.DEFINE_YOUR_PASSWORD,
     );
+    return { success: true };
   }
 
   @ApiExcludeEndpoint()
@@ -103,16 +104,22 @@ export class AuthController {
     @Body() { email, username }: BasicAuthId,
     @CurrentHost() host: string,
   ) {
-    const auth = await this.authService.get({ OR: [{ email, username }] });
-    if (!auth)
-      throw new NotFoundException('Unable to reset password, user not found');
+    const where = email ? { email } : username ? { username } : undefined;
+    const auth = where ? await this.authService.get(where) : undefined;
+    if (auth?.enabled) {
+      await this.authService.generateAndSendUrl(
+        host,
+        auth,
+        AuthAction.RESET_PASSWORD,
+        AuthEmailTemplates.RESET_YOUR_PASSWORD,
+      );
+    }
 
-    return this.authService.generateAndSendUrl(
-      host,
-      auth,
-      AuthAction.RESET_PASSWORD,
-      AuthEmailTemplates.RESET_YOUR_PASSWORD,
-    );
+    return {
+      success: true,
+      message:
+        'Si un compte est associé à cette adresse, un lien de réinitialisation a été envoyé.',
+    };
   }
 
   @Get()

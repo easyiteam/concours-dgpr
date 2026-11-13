@@ -45,6 +45,23 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
+## Transactional email and password reset
+
+The API sends transactional emails through the SuperSend TX API. Configure
+`SUPERSENDTX_API_KEY` in the local, Git-ignored `api/.env` file. The
+`EMAIL_FROM` address configured for the API must belong to a domain verified
+with SuperSend TX.
+
+For a local non-Docker run, copy `api/.env.example` to `api/.env` and add the
+API key; the API reads this file through `dotenv`. The
+existing Docker Compose configuration is unchanged and continues to load
+`api/.env.prod` for the API container; configure the key using the existing
+production environment setup.
+
+The administrator login page includes a password-reset request. Reset links
+expire after 30 minutes and can only be used once; the API returns the same
+confirmation whether or not an account exists for the submitted email.
+
 ## Test
 
 ```bash

@@ -1,7 +1,17 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { BasicRole } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsArray, IsEmail, IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsByteLength,
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+  ValidateNested,
+} from 'class-validator';
 
 export class BasicAuthId {
   @ApiPropertyOptional()
@@ -48,5 +58,11 @@ export class BasicAuthCredentials extends BasicAuthId {
 
 export class BasicAuthSetPassword {
   @ApiProperty() @IsString() id: string;
-  @ApiProperty() @IsString() password: string;
+  @ApiProperty() @IsString() token: string;
+  @ApiProperty()
+  @IsString()
+  @MinLength(12)
+  @IsByteLength(1, 72)
+  @MaxLength(72)
+  password: string;
 }

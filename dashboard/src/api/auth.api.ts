@@ -29,6 +29,15 @@ export class AuthApi {
     }
   }
 
+  async requestPasswordReset(email: string) {
+    try {
+      await api.post(`${this.basePath}/reset-password`, { email });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   async findAll(args: Pagination) {
     try {
       const response = await api.get(this.basePath, { params: args });

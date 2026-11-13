@@ -13,9 +13,7 @@ export const Env = {
     baseUrl: process.env.O_API_BASE_URL,
   },
   email: {
-    host: process.env.EMAIL_HOST,
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    apiKey: process.env.SUPERSENDTX_API_KEY,
     from: process.env.EMAIL_FROM,
   },
   auth: {
