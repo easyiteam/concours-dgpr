@@ -15,6 +15,39 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        with:
+          fetch-depth: 0
 
+      # Only the applications whose folder changed are rebuilt. A change to the
+      # compose file or this workflow, or an unknown previous commit, rebuilds all.
+      - name: Detect changed applications
+        id: changes
+        run: |
+          BEFORE="${{ github.event.before }}"
+          if [ -z "$BEFORE" ] || ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            CHANGED="docker-compose.yml"
+          else
+            CHANGED=$(git diff --name-only "$BEFORE" "$GITHUB_SHA")
+          fi
+
+          SERVICES=""
+          if echo "$CHANGED" | grep -qE '^(docker-compose\.yml|\.github/workflows/)'; then
+            SERVICES="migrate api dashboard web sigycop-scorer"
+          else
+            if echo "$CHANGED" | grep -q '^api/'; then SERVICES="$SERVICES migrate api"; fi
+            if echo "$CHANGED" | grep -q '^dashboard/'; then SERVICES="$SERVICES dashboard"; fi
+            if echo "$CHANGED" | grep -q '^web/'; then SERVICES="$SERVICES web"; fi
+            if echo "$CHANGED" | grep -q '^sigycop-scorer/'; then SERVICES="$SERVICES sigycop-scorer"; fi
+          fi
+
+          echo "Applications to rebuild:${SERVICES:- none}"
+          echo "services=$SERVICES" >> "$GITHUB_OUTPUT"
+
+      - name: Build changed applications
+        if: steps.changes.outputs.services != ''
+        run: docker compose build ${{ steps.changes.outputs.services }}
+
+      # Recreates only the containers whose image or configuration changed, and
+      # builds any application whose image does not exist yet.
       - name: Run docker compose
-        run: docker compose up --build --force-recreate -d
+        run: docker compose up -d

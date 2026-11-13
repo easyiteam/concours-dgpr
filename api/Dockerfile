@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 FROM node:22 AS build
 
 RUN apt-get update \
@@ -9,12 +10,14 @@ RUN apt-get update \
   --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
+# Chrome is installed above: puppeteer must not download its own copy.
+ENV PUPPETEER_SKIP_DOWNLOAD=true \
+  PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
+  yarn install --frozen-lockfile --prefer-offline
 COPY . .
 RUN yarn generate
 RUN yarn build
-
-
-
